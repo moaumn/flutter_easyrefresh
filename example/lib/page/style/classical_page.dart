@@ -13,7 +13,7 @@ class ClassicPage extends StatefulWidget {
   State<ClassicPage> createState() => _ClassicPageState();
 }
 
-class _ClassicPageState extends State<ClassicPage> {
+class _ClassicPageState extends State<ClassicPage> with TickerProviderStateMixin {
   late EasyRefreshController _controller;
   int _count = 10;
   Axis _scrollDirection = Axis.vertical;
@@ -28,6 +28,8 @@ class _ClassicPageState extends State<ClassicPage> {
     alignment: MainAxisAlignment.start,
     infinite: true,
   );
+  late final tabController = TabController(length: 6, vsync: this);
+  late final pageController = PageController();
 
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _ClassicPageState extends State<ClassicPage> {
   @override
   void dispose() {
     _controller.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
@@ -119,16 +122,38 @@ class _ClassicPageState extends State<ClassicPage> {
                     ? IndicatorResult.noMore
                     : IndicatorResult.success);
               },
-        child: ListView.builder(
-          clipBehavior: Clip.none,
-          scrollDirection: _scrollDirection,
-          padding: EdgeInsets.zero,
-          itemCount: _count,
-          itemBuilder: (ctx, index) {
-            return SkeletonItem(
-              direction: _scrollDirection,
-            );
-          },
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  TabBar(
+                    controller: tabController,
+                    isScrollable: true,
+                    tabs: [
+                      Tab(text: 'Tab 1111111111111'),
+                      Tab(text: 'Tab 2222222222222'),
+                      Tab(text: 'Tab 3333333333333'),
+                      Tab(text: 'Tab 3333333333333'),
+                      Tab(text: 'Tab 3333333333333'),
+                      Tab(text: 'Tab 3333333333333'),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 1000,
+                    child: PageView(
+                      controller: pageController,
+                      children: [
+                        Container(),
+                        Container(),
+                        Container(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: MenuBottomBar(

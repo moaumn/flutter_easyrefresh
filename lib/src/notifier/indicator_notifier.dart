@@ -485,7 +485,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_axis != position.axis || _axisDirection != position.axisDirection) {
       _axis = position.axis;
       _axisDirection = position.axisDirection;
-      Future(() {
+      Future.microtask(() {
         notifyListeners();
       });
     }
